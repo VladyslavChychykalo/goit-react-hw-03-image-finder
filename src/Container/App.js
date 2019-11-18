@@ -17,29 +17,91 @@ const mapper = images => {
 };
 
 export default class App extends Component {
-  state = { images: [], isLoading: false, error: null };
+  state = { images: [], isLoading: false, error: null, page: 1, input: '' };
 
-  componentDidMount() {
-    this.fetchImagesAPI();
-  }
+  // componentDidMount() {
+  //   this.fetchImagesAPI();
+  // }
 
   fetchImagesAPI = query => {
+    const { page } = this.state;
     this.setState({ isLoading: true });
 
-    fetchImages(query)
-      .then(({ data }) => this.setState({ images: mapper(data.hits) }))
+    // this.setState(prevState => ({
+    //   page: prevState.page + 1,
+    // }));
+
+    fetchImages(query, page)
+      .then(({ data }) =>
+        this.setState(prevState => {
+          return { images: mapper([...prevState.images, ...data.hits]) };
+        }),
+      )
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
 
+  // handleIncrementPage = query => {
+  //   console.log(query);
+  //   const { page } = this.state;
+  //   this.setState({ page: page + 1 });
+  //   fetchImages(query, page)
+  //     .then(({ data }) =>
+  //       this.setState(prevState => {
+  //         return { images: mapper([...prevState.images, ...data.hits]) };
+  //       }),
+  //     )
+  //     .catch(error => this.setState({ error }))
+  //     .finally(() => this.setState({ isLoading: false }));
+  // };
+
+  handleSubmit = value => {
+    const { input } = this.state;
+    if (input === '') return;
+
+    this.setState({
+      page: 1,
+      images: [],
+      isLoading: true,
+    });
+    this.fetchImagesAPI(value);
+  };
+
+  handleChange = value => {
+    this.setState({
+      input: value,
+    });
+  };
+
+  pageAdd = () => {
+    const { input } = this.state;
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+    this.fetchImagesAPI(input);
+  };
+
   render() {
-    const { images, isLoading, error } = this.state;
+    const { images, isLoading, error, input } = this.state;
     return (
       <div className={styles.app}>
-        <SearchForm onSubmit={this.fetchImagesAPI} />
+        <SearchForm
+          onSubmit={this.handleSubmit}
+          value={input}
+          onChange={this.handleChange}
+        />
         <Gallery items={images} />
         {error && <ErrorNotification />}
         {isLoading && <Loader />}
+        {images.length > 1 && (
+          <button
+            className={styles.button}
+            type="button"
+            onClick={this.pageAdd}
+          >
+            Load more
+          </button>
+        )}
       </div>
     );
   }
