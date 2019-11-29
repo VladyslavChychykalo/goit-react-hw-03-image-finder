@@ -49,9 +49,6 @@ export default class SearchForm extends Component {
           placeholder="Search images..."
           value={value}
           onChange={this.handleChange}
-          // onClick={() => {
-          //   return value === '';
-          // }}
           onFocus={e =>
             e.target.value === value ? e.target.value === '' : null
           }

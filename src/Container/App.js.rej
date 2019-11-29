@@ -1,0 +1,4 @@
+diff a/src/Container/App.js b/src/Container/App.js	(rejected hunks)
+@@ -26 +26 @@ export default class App extends Component {
+-    console.log(page);
++    // console.log(page);
