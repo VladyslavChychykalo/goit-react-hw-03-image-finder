@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Modal.module.css';
 
-export default class Modal extends Component {
+class Modal extends Component {
   backdropRef = createRef();
 
   static propTypes = {
@@ -50,3 +50,5 @@ export default class Modal extends Component {
     );
   }
 }
+
+export default Modal;

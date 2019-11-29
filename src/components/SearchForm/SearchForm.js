@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { searchForm } from './SearchForm.module.css';
 
-export default class SearchForm extends Component {
+class SearchForm extends Component {
   state = { query: '' };
 
   static propTypes = {
@@ -38,3 +38,5 @@ export default class SearchForm extends Component {
     );
   }
 }
+
+export default SearchForm;

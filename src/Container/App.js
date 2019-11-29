@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Gallery from '../components/Gallery/Gallery';
 import ErrorNotification from '../components/ErrorNotification/ErrorNotification';
@@ -16,8 +16,10 @@ const mapper = images => {
   );
 };
 
-export default class App extends Component {
+class App extends Component {
   state = { images: [], isLoading: false, error: null, page: 1, input: '' };
+
+  buttonLoadMoreRef = createRef();
 
   fetchImagesAPI = query => {
     this.setState({ isLoading: true });
@@ -28,7 +30,17 @@ export default class App extends Component {
         this.setState({ images: mapper([...images, ...data.hits]) }),
       )
       .catch(error => this.setState({ error }))
-      .finally(() => this.setState({ isLoading: false }));
+      .finally(() => {
+        this.setState({ isLoading: false });
+
+        if (page > 1) {
+          const { current } = this.buttonLoadMoreRef;
+          window.scrollTo({
+            top: current.offsetTop - 2 * window.innerHeight,
+            behavior: 'smooth',
+          });
+        }
+      });
   };
 
   handleSubmit = value => {
@@ -74,6 +86,7 @@ export default class App extends Component {
             className={styles.button}
             type="button"
             onClick={this.handleIncrementPage}
+            ref={this.buttonLoadMoreRef}
           >
             Load more
           </button>
@@ -82,3 +95,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default App;

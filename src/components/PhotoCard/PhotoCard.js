@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Modal from '../Modal/Modal';
 import styles from './PhotoCard.module.css';
 
-export default class PhotoCard extends Component {
+class PhotoCard extends Component {
   state = { isModalOpen: false };
 
   static propTypes = {
@@ -29,7 +29,7 @@ export default class PhotoCard extends Component {
     const { isModalOpen } = this.state;
     const { link, likes, views, comments, downloads, linkLarge } = this.props;
     return (
-      <>
+      <div>
         <div className={styles.photoCard}>
           <img src={link} alt="" />
 
@@ -64,7 +64,9 @@ export default class PhotoCard extends Component {
         {isModalOpen && (
           <Modal linkLarge={linkLarge} onClose={this.closeModal} />
         )}
-      </>
+      </div>
     );
   }
 }
+
+export default PhotoCard;
