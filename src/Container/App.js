@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Gallery from '../components/Gallery/Gallery';
-import Loader from '../components/Loader/Loader';
 import ErrorNotification from '../components/ErrorNotification/ErrorNotification';
 import fetchImages from '../services/images-api';
 import styles from './App.module.css';
+import Spinner from '../components/Spinner/Spinner';
 
 const mapper = images => {
   return images.map(
@@ -68,7 +68,7 @@ export default class App extends Component {
         />
         <Gallery items={images} />
         {error && <ErrorNotification />}
-        {isLoading && <Loader />}
+        {isLoading && <Spinner />}
         {images.length > 1 && (
           <button
             className={styles.button}
