@@ -41,7 +41,7 @@ export default class Modal extends Component {
         onClick={this.handleBackdropClick}
         role="button"
         tabIndex="0"
-        onKeyPress
+        onKeyPress={() => {}}
       >
         <div className={styles.modal}>
           <img src={linkLarge} alt="" />

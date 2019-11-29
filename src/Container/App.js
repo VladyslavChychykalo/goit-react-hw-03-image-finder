@@ -19,66 +19,100 @@ const mapper = images => {
 export default class App extends Component {
   state = { images: [], isLoading: false, error: null, page: 1, input: '' };
 
-  // componentDidMount() {
-  //   this.fetchImagesAPI();
-  // }
-
   fetchImagesAPI = query => {
-    const { page } = this.state;
     this.setState({ isLoading: true });
+    const { page, images } = this.state;
 
-    // this.setState(prevState => ({
-    //   page: prevState.page + 1,
-    // }));
-
+    // console.log(page);
     fetchImages(query, page)
-      .then(({ data }) =>
-        this.setState(prevState => {
-          return { images: mapper([...prevState.images, ...data.hits]) };
-        }),
+      .then(
+        ({ data }) =>
+          this.setState({ images: mapper([...images, ...data.hits]) }),
+        // this.setState(prevState => {
+        //   return { images: mapper([...prevState.images, ...data.hits]) };
+        // }),
       )
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  // handleIncrementPage = query => {
-  //   console.log(query);
-  //   const { page } = this.state;
-  //   this.setState({ page: page + 1 });
-  //   fetchImages(query, page)
-  //     .then(({ data }) =>
-  //       this.setState(prevState => {
-  //         return { images: mapper([...prevState.images, ...data.hits]) };
-  //       }),
-  //     )
-  //     .catch(error => this.setState({ error }))
-  //     .finally(() => this.setState({ isLoading: false }));
+  //   onImageFetch = value => {
+  //     const { page, imagesList } = this.state;
+  //     axios
+  //       .get(
+  //         `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${value}&page=${page}&per_page=12&key=${API_KEY}`,
+  //       )
+  //       .then(data =>
+  //         this.setState({
+  //           imagesList: [...imagesList, ...data.data.hits],
+  //           isLoading: false,
+  //         }),
+  //       )
+  //       // eslint-disable-next-line no-console
+  //       .catch(err => console.log(err))
+  //       .finally(() => {
+  //         if (page > 1) {
+  //           const { current } = this.buttonLoadMoreRef;
+  //           window.scrollTo({
+  //             top: current.offsetTop - 2 * window.innerHeight,
+  //             behavior: 'smooth',
+  //           });
+  //         }
+  //       });
+  //   };
+
+  // handleSubmit = value => {
+  //   this.setState({
+  //     page: 1,
+  //     images: [],
+  //     isLoading: true,
+  //   });
+  //   this.fetchImagesAPI(value);
   // };
 
   handleSubmit = value => {
-    const { input } = this.state;
-    if (input === '') return;
-
-    this.setState({
-      page: 1,
-      images: [],
-      isLoading: true,
-    });
-    this.fetchImagesAPI(value);
+    this.setState(
+      {
+        page: 1,
+        images: [],
+        isLoading: true,
+      },
+      () => {
+        this.fetchImagesAPI(value);
+      },
+    );
   };
 
-  handleChange = value => {
+  // handleInputChange = value => {
+  //   this.setState({
+  //     input: value,
+  //   });
+  // };
+
+  handleInputChange = value => {
     this.setState({
       input: value,
     });
   };
 
-  pageAdd = () => {
+  // handleIncrementPage = () => {
+  //   const { input } = this.state;
+  //   this.setState(prevState => ({
+  //     page: prevState.page + 1,
+  //   }));
+  //   this.fetchImagesAPI(input);
+  // };
+
+  handleIncrementPage = () => {
     const { input } = this.state;
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-    }));
-    this.fetchImagesAPI(input);
+    this.setState(
+      prevState => ({
+        page: prevState.page + 1,
+      }),
+      () => {
+        this.fetchImagesAPI(input);
+      },
+    );
   };
 
   render() {
@@ -88,7 +122,7 @@ export default class App extends Component {
         <SearchForm
           onSubmit={this.handleSubmit}
           value={input}
-          onChange={this.handleChange}
+          onChange={this.handleInputChange}
         />
         <Gallery items={images} />
         {error && <ErrorNotification />}
@@ -97,7 +131,7 @@ export default class App extends Component {
           <button
             className={styles.button}
             type="button"
-            onClick={this.pageAdd}
+            onClick={this.handleIncrementPage}
           >
             Load more
           </button>

@@ -32,15 +32,14 @@ export default class SearchForm extends Component {
     this.props.onChange(target.value);
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
+  handleSubmit = e => {
+    e.preventDefault();
     const { value } = this.props;
     const { onSubmit } = this.props;
     onSubmit(value);
   };
 
   render() {
-    // const { query } = this.state;
     const { value } = this.props;
     return (
       <form className={searchForm} onSubmit={this.handleSubmit}>
@@ -50,12 +49,13 @@ export default class SearchForm extends Component {
           placeholder="Search images..."
           value={value}
           onChange={this.handleChange}
+          // onClick={() => {
+          //   return value === '';
+          // }}
+          onFocus={e =>
+            e.target.value === value ? e.target.value === '' : null
+          }
         />
-        {/* {images.length > 1 && (
-          <button type="button" onClick={this.handleLoad}>
-            Load more
-          </button>
-        )} */}
       </form>
     );
   }
