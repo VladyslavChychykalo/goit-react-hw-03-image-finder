@@ -3,55 +3,36 @@ import PropTypes from 'prop-types';
 import { searchForm } from './SearchForm.module.css';
 
 export default class SearchForm extends Component {
-  // state = { query: '' };
+  state = { query: '' };
 
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
   };
 
-  // handleChange = e => {
-  //   this.setState({
-  //     query: e.target.value,
-  //   });
-  // };
-
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   if (this.state.query === '') return;
-  //   this.props.onSubmit(this.state.query);
-  //   // this.setState({ query: '' });
-  // };
-
-  // handleLoad = () => {
-  //   this.props.onIncrement(this.state.query);
-  // };
-
-  handleChange = ({ target }) => {
-    this.props.onChange(target.value);
+  handleChange = e => {
+    this.setState({
+      query: e.target.value,
+    });
   };
 
   handleSubmit = e => {
     e.preventDefault();
-    const { value } = this.props;
-    const { onSubmit } = this.props;
-    onSubmit(value);
+    const { query } = this.state;
+    if (query === '') return;
+    this.props.onSubmit(query);
+    this.setState({ query: '' });
   };
 
   render() {
-    const { value } = this.props;
+    const { query } = this.state;
     return (
       <form className={searchForm} onSubmit={this.handleSubmit}>
         <input
           type="text"
           autoComplete="off"
           placeholder="Search images..."
-          value={value}
+          value={query}
           onChange={this.handleChange}
-          onFocus={e =>
-            e.target.value === value ? e.target.value === '' : null
-          }
         />
       </form>
     );
