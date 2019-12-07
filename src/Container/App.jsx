@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import SearchForm from '../components/SearchForm/SearchForm';
 import Gallery from '../components/Gallery/Gallery';
 import ErrorNotification from '../components/ErrorNotification/ErrorNotification';
@@ -19,8 +19,6 @@ const mapper = images => {
 class App extends Component {
   state = { images: [], isLoading: false, error: null, page: 1, input: '' };
 
-  buttonLoadMoreRef = createRef();
-
   fetchImagesAPI = query => {
     this.setState({ isLoading: true });
     const { page, images } = this.state;
@@ -34,9 +32,8 @@ class App extends Component {
         this.setState({ isLoading: false });
 
         if (page > 1) {
-          const { current } = this.buttonLoadMoreRef;
           window.scrollTo({
-            top: current.offsetTop - 2 * window.innerHeight,
+            top: document.documentElement.scrollHeight,
             behavior: 'smooth',
           });
         }
@@ -86,7 +83,6 @@ class App extends Component {
             className={styles.button}
             type="button"
             onClick={this.handleIncrementPage}
-            ref={this.buttonLoadMoreRef}
           >
             Load more
           </button>
