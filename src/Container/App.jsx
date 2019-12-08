@@ -5,16 +5,7 @@ import ErrorNotification from '../components/ErrorNotification/ErrorNotification
 import fetchImages from '../services/images-api';
 import styles from './App.module.css';
 import Spinner from '../components/Spinner/Spinner';
-
-const mapper = images => {
-  return images.map(
-    ({ webformatURL: link, largeImageURL: linkLarge, ...props }) => ({
-      linkLarge,
-      link,
-      ...props,
-    }),
-  );
-};
+import imagesMapper from '../utils/imagesMapper';
 
 class App extends Component {
   state = { images: [], isLoading: false, error: null, page: 1, input: '' };
@@ -25,7 +16,7 @@ class App extends Component {
 
     fetchImages(query, page)
       .then(({ data }) =>
-        this.setState({ images: mapper([...images, ...data.hits]) }),
+        this.setState({ images: imagesMapper([...images, ...data.hits]) }),
       )
       .catch(error => this.setState({ error }))
       .finally(() => {
